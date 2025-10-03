@@ -1,0 +1,86 @@
+{
+  "name": "mmr-ng",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "frontend/mmr-ng/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/frontend/mmr-ng",
+        "browser": "frontend/mmr-ng/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "frontend/mmr-ng/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "frontend/mmr-ng/public"
+          }
+        ],
+        "styles": ["frontend/mmr-ng/src/styles.css"],
+        "server": "frontend/mmr-ng/src/main.server.ts",
+        "ssr": {
+          "entry": "frontend/mmr-ng/src/server.ts"
+        },
+        "outputMode": "server"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "mmr-ng:build:production"
+        },
+        "development": {
+          "buildTarget": "mmr-ng:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular/build:extract-i18n",
+      "options": {
+        "buildTarget": "mmr-ng:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "mmr-ng:build",
+        "staticFilePath": "dist/frontend/mmr-ng/browser",
+        "spa": true
+      }
+    }
+  }
+}
